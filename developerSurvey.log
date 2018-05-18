@@ -1,0 +1,128 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/stevenchun/Google Drive/School/ECON45/Culminating/developer
+> Survey.log
+  log type:  text
+ opened on:  11 May 2018, 16:53:11
+
+. local shipVars ships_to_us ships_from_us ships_to_nl ///
+>         ships_from_nl ships_to_fr ships_from_fr ships_to_gb ///
+>         ships_from_gb ships_to_ca ships_from_ca ships_to_de ///
+>         ships_from_de ships_to_au ships_from_au ships_to_eu ///
+>         ships_from_eu ships_to_es ships_from_es ships_to_namerica ///
+>         ships_from_namerica ships_to_be ships_from_be ships_to_ww ///
+>         ships_from_ww ships_to_si ships_from_si ships_to_it ships_from_it ///
+>         ships_to_dk ships_from_dk ships_to_samerica ships_from_samerica ///
+>         ships_to_ch ships_from_ch ships_to_br ships_from_br ships_to_cz ///
+>         ships_from_cz ships_to_se ships_from_se ships_to_co ships_from_co ///
+>         ships_to_cn ships_from_cn ships_to_pl ships_from_pl ships_to_gr ///
+>         ships_from_gr 
+
+. 
+. local encodedShipVars shipsToUS shipsFromUS shipsToNL ///
+>         shipsFromNL shipsToFR shipsFromFR shipsToGB ///
+>         shipsFromGB shipsToCA shipsFromCA shipsToDE ///
+>         shipsFromDE shipsToAU shipsFromAU shipsToEU ///
+>         shipsFromEU shipsToES shipsFromES shipsToNAMERICA ///
+>         shipsFromNAMERICA shipsToBE shipsFromBE shipsToWW ///
+>         shipsFromWW shipsToSI shipsFromSI shipsToIT shipsFromIT ///
+>         shipsToDK shipsFromDK shipsToSAMERICA shipsFromSAMERICA ///
+>         shipsToCH shipsFromCH shipsToBR shipsFromBR shipsToCZ ///
+>         shipsFromCZ shipsToSE shipsFromSE shipsToCO shipsFromCO ///
+>         shipsToCN shipsFromCN shipsToPL shipsFromPL shipsToGR ///
+>         shipsFromGR
+
+. 
+. local n : word count `shipVars'
+
+. 
+. import delimited using "./data/dream_market_cocaine_listings.csv" 
+(64 vars, 1,504 obs)
+
+. 
+. forvalues i = 1/`n' {
+  2.     local a : word `i' of `shipVars'
+  3.     local b : word `i' of `encodedShipVars'
+  4.         di "`a' `b'"
+  5.         gen `b' = (`a' == "TRUE")
+  6.         //encode `a', generate(`b')
+.         drop `a'
+  7. }
+ships_to_us shipsToUS
+ships_from_us shipsFromUS
+ships_to_nl shipsToNL
+ships_from_nl shipsFromNL
+ships_to_fr shipsToFR
+ships_from_fr shipsFromFR
+ships_to_gb shipsToGB
+ships_from_gb shipsFromGB
+ships_to_ca shipsToCA
+ships_from_ca shipsFromCA
+ships_to_de shipsToDE
+ships_from_de shipsFromDE
+ships_to_au shipsToAU
+ships_from_au shipsFromAU
+ships_to_eu shipsToEU
+ships_from_eu shipsFromEU
+ships_to_es shipsToES
+ships_from_es shipsFromES
+ships_to_namerica shipsToNAMERICA
+ships_from_namerica shipsFromNAMERICA
+ships_to_be shipsToBE
+ships_from_be shipsFromBE
+ships_to_ww shipsToWW
+ships_from_ww shipsFromWW
+ships_to_si shipsToSI
+ships_from_si shipsFromSI
+ships_to_it shipsToIT
+ships_from_it shipsFromIT
+ships_to_dk shipsToDK
+ships_from_dk shipsFromDK
+ships_to_samerica shipsToSAMERICA
+ships_from_samerica shipsFromSAMERICA
+ships_to_ch shipsToCH
+ships_from_ch shipsFromCH
+ships_to_br shipsToBR
+ships_from_br shipsFromBR
+ships_to_cz shipsToCZ
+ships_from_cz shipsFromCZ
+ships_to_se shipsToSE
+ships_from_se shipsFromSE
+ships_to_co shipsToCO
+ships_from_co shipsFromCO
+ships_to_cn shipsToCN
+ships_from_cn shipsFromCN
+ships_to_pl shipsToPL
+ships_from_pl shipsFromPL
+ships_to_gr shipsToGR
+ships_from_gr shipsFromGR
+
+. 
+. // From Coindex, average for the week the scraper was running.
+. local btcInDollars = 2284.165
+
+. 
+. gen us_price = btc_price * `btcInDollars'
+
+. gen us_cost_per_gram = cost_per_gram * `btcInDollars'
+
+. gen us_cost_per_gram_pure = cost_per_gram_pure * `btcInDollars'
+
+. 
+. table escrow, content(mean rating sd rating mean cost_per_gram sd cost_per_gr
+> am mean cost_per_gram_pure)
+
+----------------------------------------------------------------------------
+   escrow | mean(rating)   sd(rating) mean(cost~m) sd(cost_p~m) mean(cost~e)
+----------+-----------------------------------------------------------------
+        0 |     4.892276     .0962092     .0358015     .0252553     .0406085
+        1 |     4.881744     .1282268     .0294617     .0111557     .0333347
+----------------------------------------------------------------------------
+
+. // sum rating age payoff in_market
+. 
+. save cocainePrices
+file cocainePrices.dta saved
+
+. 
+. capture log close

@@ -1,0 +1,243 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/stevenchun/Google Drive/School/ECON45/Culminating/regressio
+> ns.log
+  log type:  text
+ opened on:  18 May 2018, 10:29:05
+
+. 
+. local encodedShipVars shipsToUS shipsFromUS shipsToNL ///
+>         shipsFromNL shipsToFR shipsFromFR shipsToGB ///
+>         shipsFromGB shipsToCA shipsFromCA shipsToDE ///
+>         shipsFromDE shipsToAU shipsFromAU shipsToEU ///
+>         shipsFromEU shipsToES shipsFromES shipsToNAMERICA ///
+>         shipsFromNAMERICA shipsToBE shipsFromBE shipsToWW ///
+>         shipsFromWW shipsToSI shipsFromSI shipsToIT shipsFromIT ///
+>         shipsToDK shipsFromDK shipsToSAMERICA shipsFromSAMERICA ///
+>         shipsToCH shipsFromCH shipsToBR shipsFromBR shipsToCZ ///
+>         shipsFromCZ shipsToSE shipsFromSE shipsToCO shipsFromCO ///
+>         shipsToCN shipsFromCN shipsToPL shipsFromPL shipsToGR ///
+>         shipsFromGR
+
+.         
+. local shipsToVars shipsToUS shipsToNL ///
+>         shipsToFR shipsToGB ///
+>         shipsToCA shipsToDE ///
+>         shipsToAU shipsToEU ///
+>         shipsToES shipsToNAMERICA ///
+>         shipsToBE shipsToWW ///
+>         shipsToSI shipsToIT ///
+>         shipsToDK shipsToSAMERICA ///
+>         shipsToCH shipsToBR shipsToCZ ///
+>         shipsToSE shipsToCO ///
+>         shipsToCN shipsToPL shipsToGR ///
+>         
+
+.         
+. local shipsFromVars shipsFromUS ///
+>         shipsFromNL shipsFromFR ///
+>         shipsFromGB shipsFromCA ///
+>         shipsFromDE shipsFromAU ///
+>         shipsFromEU shipsFromES ///
+>         shipsFromNAMERICA shipsFromBE ///
+>         shipsFromWW shipsFromSI shipsFromIT ///
+>         shipsFromDK shipsFromSAMERICA ///
+>         shipsFromCH shipsFromBR ///
+>         shipsFromCZ shipsFromSE shipsFromCO ///
+>         shipsFromCN shipsFromPL ///
+>         shipsFromGR
+
+.         
+.         
+. use cocainePrices
+
+. 
+. 
+. reg lnUSPricePerGramPure escrow, cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(1, 179)         =       2.89
+                                                Prob > F          =     0.0906
+                                                R-squared         =     0.0084
+                                                Root MSE          =     .56304
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.1202695   .0706907    -1.70   0.091    -.2597638    .0192248
+       _cons |   4.417181   .0650983    67.85   0.000     4.288722     4.54564
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow successful_trans, cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(2, 179)         =       2.16
+                                                Prob > F          =     0.1181
+                                                R-squared         =     0.0132
+                                                Root MSE          =     .56187
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.1175851   .0710113    -1.66   0.100    -.2577121    .0225419
+successful~s |   .0000741   .0000745     1.00   0.321    -.0000728     .000221
+       _cons |   4.389963   .0721027    60.88   0.000     4.247683    4.532244
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow lnSuccessfulTrans, cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(2, 179)         =       2.97
+                                                Prob > F          =     0.0540
+                                                R-squared         =     0.0176
+                                                Root MSE          =     .56059
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.1076065   .0721642    -1.49   0.138    -.2500085    .0347954
+lnSuccessf~s |   .0365056   .0211109     1.73   0.085    -.0051527    .0781639
+       _cons |   4.227381   .1356968    31.15   0.000      3.95961    4.495152
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow lnSuccessfulTrans flake, cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(3, 179)         =       3.92
+                                                Prob > F          =     0.0097
+                                                R-squared         =     0.0264
+                                                Root MSE          =     .55828
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.1002943    .073836    -1.36   0.176    -.2459952    .0454067
+lnSuccessf~s |   .0355895    .020926     1.70   0.091    -.0057039    .0768829
+       flake |   .1133585   .0507063     2.24   0.027     .0132994    .2134175
+       _cons |   4.190057   .1406234    29.80   0.000     3.912564     4.46755
+------------------------------------------------------------------------------
+
+. 
+. // Older vendors charge ten percent more at a significant level
+. reg lnUSPricePerGramPure escrow lnSuccessfulTrans flake inMarket2016, cluster
+> (vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(4, 179)         =       3.47
+                                                Prob > F          =     0.0094
+                                                R-squared         =     0.0305
+                                                Root MSE          =     .55728
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.0710026   .0806442    -0.88   0.380    -.2301383    .0881331
+lnSuccessf~s |   .0353586   .0208714     1.69   0.092     -.005827    .0765443
+       flake |   .1186094    .051237     2.31   0.022     .0175032    .2197156
+inMarket2016 |   .1023565   .0680503     1.50   0.134    -.0319276    .2366406
+       _cons |   4.149918   .1484537    27.95   0.000     3.856974    4.442863
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow rating lnSuccessfulTrans flake inMarket2016, 
+> cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(5, 179)         =       3.68
+                                                Prob > F          =     0.0034
+                                                R-squared         =     0.0312
+                                                Root MSE          =     .55727
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |  -.0687807   .0804755    -0.85   0.394    -.2275834    .0900221
+      rating |   .1235901   .1899681     0.65   0.516     -.251275    .4984552
+lnSuccessf~s |   .0353631   .0209154     1.69   0.093    -.0059094    .0766356
+       flake |   .1141146    .053169     2.15   0.033     .0091959    .2190332
+inMarket2016 |   .1066644   .0680497     1.57   0.119    -.0276186    .2409473
+       _cons |   3.545269   .8887982     3.99   0.000     1.791399     5.29914
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow rating lnSuccessfulTrans flake inMarket2016 s
+> hipsFromAU shipsFromFR
+
+      Source |       SS           df       MS      Number of obs   =     1,504
+-------------+----------------------------------   F(7, 1496)      =     54.24
+       Model |  97.1994591         7   13.885637   Prob > F        =    0.0000
+    Residual |  382.985147     1,496  .256006114   R-squared       =    0.2024
+-------------+----------------------------------   Adj R-squared   =    0.1987
+       Total |  480.184606     1,503  .319484102   Root MSE        =    .50597
+
+------------------------------------------------------------------------------
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |   .1121692   .0341214     3.29   0.001     .0452383    .1791002
+      rating |  -.0411924   .1099127    -0.37   0.708    -.2567917    .1744068
+lnSuccessf~s |   .0453975   .0087863     5.17   0.000     .0281627    .0626323
+       flake |   .1642679   .0285044     5.76   0.000     .1083551    .2201807
+inMarket2016 |   .1645281    .037119     4.43   0.000     .0917173    .2373388
+ shipsFromAU |   1.493527   .0847957    17.61   0.000     1.327196    1.659858
+ shipsFromFR |   .3105629   .0632744     4.91   0.000      .186447    .4346789
+       _cons |   4.083886   .5394679     7.57   0.000     3.025692     5.14208
+------------------------------------------------------------------------------
+
+. 
+. reg lnUSPricePerGramPure escrow rating lnSuccessfulTrans flake inMarket2016 s
+> hipsFromAU shipsFromFR, cluster(vendor_name)
+
+Linear regression                               Number of obs     =      1,504
+                                                F(7, 179)         =      41.66
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2024
+                                                Root MSE          =     .50597
+
+                          (Std. Err. adjusted for 180 clusters in vendor_name)
+------------------------------------------------------------------------------
+             |               Robust
+lnUSPriceP~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      escrow |   .1121692    .039308     2.85   0.005     .0346026    .1897359
+      rating |  -.0411924   .1705115    -0.24   0.809    -.3776637    .2952789
+lnSuccessf~s |   .0453975   .0186295     2.44   0.016     .0086358    .0821592
+       flake |   .1642679   .0426005     3.86   0.000     .0802042    .2483316
+inMarket2016 |   .1645281   .0417271     3.94   0.000     .0821877    .2468684
+ shipsFromAU |   1.493527   .0953501    15.66   0.000     1.305372    1.681682
+ shipsFromFR |   .3105629   .0487036     6.38   0.000     .2144559      .40667
+       _cons |   4.083886   .7896774     5.17   0.000     2.525611    5.642161
+------------------------------------------------------------------------------
+
+. 
+. 
+. 
+. //Robustness regressions
+. 
+. //areg lnUSPricePerGramPure escrow lnSuccessfulTrans flake inMarket2016 ships
+> FromAU shipsFromFR, absorb(vendor_name)
+. //reg lnUSPricePerGramPure escrow lnSuccessfulTrans flake inMarket2016 `ships
+> FromVars'
+. //reg lnUSPricePerGramPure escrow lnSuccessfulTrans flake escrowYoung ratingY
+> oung youngVendor rating
+. 
+. 
+. 
+. 
+. 
+. 
+. capture log close

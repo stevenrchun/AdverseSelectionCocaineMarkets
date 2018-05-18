@@ -1,0 +1,290 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/stevenchun/Google Drive/School/ECON45/Culminating/dataConst
+> ruction.log
+  log type:  text
+ opened on:  16 May 2018, 14:15:50
+
+. 
+. 
+. // Generate dummy for old variables
+. clear
+
+. import delimited using "./Dream-4-17-16.csv"
+(11 vars, 30,000 obs)
+
+. 
+. duplicates drop vendor_name, force
+
+Duplicates in terms of vendor_name
+
+(29,032 observations deleted)
+
+. 
+. drop hash market_name item_link price name description image_link add_time sh
+> ip_from v11
+
+. 
+. gen inMarket2016 = 1
+
+. 
+. save dream2016, replace
+file dream2016.dta saved
+
+. 
+. // Work on 2017 cocaine prices
+. clear
+
+. 
+. local shipVars ships_to_us ships_from_us ships_to_nl ///
+>         ships_from_nl ships_to_fr ships_from_fr ships_to_gb ///
+>         ships_from_gb ships_to_ca ships_from_ca ships_to_de ///
+>         ships_from_de ships_to_au ships_from_au ships_to_eu ///
+>         ships_from_eu ships_to_es ships_from_es ships_to_namerica ///
+>         ships_from_namerica ships_to_be ships_from_be ships_to_ww ///
+>         ships_from_ww ships_to_si ships_from_si ships_to_it ships_from_it ///
+>         ships_to_dk ships_from_dk ships_to_samerica ships_from_samerica ///
+>         ships_to_ch ships_from_ch ships_to_br ships_from_br ships_to_cz ///
+>         ships_from_cz ships_to_se ships_from_se ships_to_co ships_from_co ///
+>         ships_to_cn ships_from_cn ships_to_pl ships_from_pl ships_to_gr ///
+>         ships_from_gr 
+
+. 
+. local encodedShipVars shipsToUS shipsFromUS shipsToNL ///
+>         shipsFromNL shipsToFR shipsFromFR shipsToGB ///
+>         shipsFromGB shipsToCA shipsFromCA shipsToDE ///
+>         shipsFromDE shipsToAU shipsFromAU shipsToEU ///
+>         shipsFromEU shipsToES shipsFromES shipsToNAMERICA ///
+>         shipsFromNAMERICA shipsToBE shipsFromBE shipsToWW ///
+>         shipsFromWW shipsToSI shipsFromSI shipsToIT shipsFromIT ///
+>         shipsToDK shipsFromDK shipsToSAMERICA shipsFromSAMERICA ///
+>         shipsToCH shipsFromCH shipsToBR shipsFromBR shipsToCZ ///
+>         shipsFromCZ shipsToSE shipsFromSE shipsToCO shipsFromCO ///
+>         shipsToCN shipsFromCN shipsToPL shipsFromPL shipsToGR ///
+>         shipsFromGR
+
+. 
+. local n : word count `shipVars'
+
+. 
+. import delimited using "./data/dream_market_cocaine_listings.csv" 
+(64 vars, 1,504 obs)
+
+. 
+. forvalues i = 1/`n' {
+  2.     local a : word `i' of `shipVars'
+  3.     local b : word `i' of `encodedShipVars'
+  4.         di "`a' `b'"
+  5.         gen `b' = (`a' == "TRUE")
+  6.         //encode `a', generate(`b')
+.         drop `a'
+  7. }
+ships_to_us shipsToUS
+ships_from_us shipsFromUS
+ships_to_nl shipsToNL
+ships_from_nl shipsFromNL
+ships_to_fr shipsToFR
+ships_from_fr shipsFromFR
+ships_to_gb shipsToGB
+ships_from_gb shipsFromGB
+ships_to_ca shipsToCA
+ships_from_ca shipsFromCA
+ships_to_de shipsToDE
+ships_from_de shipsFromDE
+ships_to_au shipsToAU
+ships_from_au shipsFromAU
+ships_to_eu shipsToEU
+ships_from_eu shipsFromEU
+ships_to_es shipsToES
+ships_from_es shipsFromES
+ships_to_namerica shipsToNAMERICA
+ships_from_namerica shipsFromNAMERICA
+ships_to_be shipsToBE
+ships_from_be shipsFromBE
+ships_to_ww shipsToWW
+ships_from_ww shipsFromWW
+ships_to_si shipsToSI
+ships_from_si shipsFromSI
+ships_to_it shipsToIT
+ships_from_it shipsFromIT
+ships_to_dk shipsToDK
+ships_from_dk shipsFromDK
+ships_to_samerica shipsToSAMERICA
+ships_from_samerica shipsFromSAMERICA
+ships_to_ch shipsToCH
+ships_from_ch shipsFromCH
+ships_to_br shipsToBR
+ships_from_br shipsFromBR
+ships_to_cz shipsToCZ
+ships_from_cz shipsFromCZ
+ships_to_se shipsToSE
+ships_from_se shipsFromSE
+ships_to_co shipsToCO
+ships_from_co shipsFromCO
+ships_to_cn shipsToCN
+ships_from_cn shipsFromCN
+ships_to_pl shipsToPL
+ships_from_pl shipsFromPL
+ships_to_gr shipsToGR
+ships_from_gr shipsFromGR
+
+. 
+. //Fix prices!!
+. //                                                                           
+>                                    1.5 then 1,5 then .5 then ,5 then 5
+. gen stringGrams = regexs(0) if(regexm(product_title, "[0-9]\.[0-9]+[ ]?[Gg]|[
+> 0-9]\,[0-9]+[ ]?[Gg]|\.[0-9]+[ ]?[Gg]|\,[0-9]+[ ]?[Gg]|\.?[0-9]+[ ]?[Gg]"))
+(29 missing values generated)
+
+. 
+. gen stringKilos = regexs(0) if(regexm(product_title, "[0-9]\.[0-9]+[ ]?[Kk]|[
+> 0-9]\,[0-9]+[ ]?[Kk]|\.[0-9]+[ ]?[Kk]|\,[0-9]+[ ]?[Kk]|\.?[0-9]+[ ]?[Kk]"))
+(1,473 missing values generated)
+
+. 
+. // destring periods and commas
+. destring stringGrams, ignore(" " "g" "G") generate(numGrams) force
+stringGrams: contains nonnumeric characters not specified in ignore()
+stringGrams: characters space g G removed; numGrams generated as double
+(74 missing values generated)
+
+. 
+. destring stringGrams, ignore(" " "g" "G") dpcomma generate(numCommaGrams) for
+> ce
+stringGrams: contains nonnumeric characters not specified in ignore()
+stringGrams: characters space g G removed; numCommaGrams generated as double
+(291 missing values generated)
+
+. 
+. // destring kils
+. 
+. destring stringKilos, ignore(" " "k" "K") generate(numKilos)
+stringKilos: characters space k K removed; numKilos generated as byte
+(1473 missing values generated)
+
+. 
+. // set fixed Grams to the appropriate amoun
+. gen fixedGrams = numCommaGrams
+(291 missing values generated)
+
+. replace fixedGrams = numGrams if (missing(fixedGrams))
+(262 real changes made)
+
+. replace fixedGrams = numKilos * 1000 if (missing(fixedGrams))
+(29 real changes made)
+
+. 
+. // recalculate btc prices
+. replace grams = fixedGrams
+(52 real changes made)
+
+. replace cost_per_gram = btc_price / fixedGrams
+(319 real changes made)
+
+. replace cost_per_gram_pure = btc_price / (fixedGrams *(quality / 100))
+(381 real changes made)
+
+. 
+. // From Coindex, average for the week the scraper was running.
+. local btcInDollars = 2284.165
+
+. 
+. // Convert to US dollars
+. gen usPrice = btc_price * `btcInDollars'
+
+. gen usPricePerGram = cost_per_gram * `btcInDollars'
+
+. gen usPricePerGramPure = cost_per_gram_pure * `btcInDollars'
+
+. 
+. // Generate flake dummy
+. gen flake = regexm(lower(product_title), "fish|scale|flake")
+
+. 
+. // Shipping dummies
+. 
+. 
+. // Generate logs
+. gen lnUSPricetPerGram = ln(usPricePerGram)
+
+. gen lnUSPricePerGramPure = ln(usPricePerGramPure)
+
+. gen lnSuccessfulTrans = ln(successful_transactions)
+
+. gen lnRating = ln(rating)
+
+. 
+. // Generate interactions
+. //gen escrowlnSuccessfulTrans = lnSuccessfulTrans * escrow
+. egen medianTransactions = median(successful_transactions)
+
+. gen youngVendor = successful_transactions < medianTransactions
+
+. gen escrowYoung = escrow*youngVendor
+
+. gen ratingYoung = rating*youngVendor
+
+. 
+. 
+. 
+. table escrow, content(mean rating sd rating mean cost_per_gram sd cost_per_gr
+> am mean cost_per_gram_pure)
+
+----------------------------------------------------------------------------
+   escrow | mean(rating)   sd(rating) mean(cost~m) sd(cost_p~m) mean(cost~e)
+----------+-----------------------------------------------------------------
+        0 |     4.892276     .0962092     .0369528     .0254982     .0418672
+        1 |     4.881744     .1282268     .0313348     .0215021      .035568
+----------------------------------------------------------------------------
+
+. // sum rating age payoff in_market
+. 
+. //drop unneeded variables
+. drop fixedGrams
+
+. drop numKilos
+
+. drop numCommaGrams
+
+. drop numGrams
+
+. drop stringGrams
+
+. drop stringKilos
+
+. drop medianTransactions
+
+. 
+. // Merge the datasets
+. 
+. merge m:1 vendor_name using dream2016.dta
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         2,183
+        from master                     1,247  (_merge==1)
+        from using                        936  (_merge==2)
+
+    matched                               257  (_merge==3)
+    -----------------------------------------
+
+. drop if _merge == 2
+(936 observations deleted)
+
+. 
+. replace inMarket2016 = 0 if (inMarket2016 == .)
+(1,247 real changes made)
+
+. 
+. save cocainePrices, replace
+file cocainePrices.dta saved
+
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. capture log close

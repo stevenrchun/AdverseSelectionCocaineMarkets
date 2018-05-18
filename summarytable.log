@@ -1,0 +1,162 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/stevenchun/Google Drive/School/ECON45/Culminating/summaryta
+> ble.log
+  log type:  text
+ opened on:  17 May 2018, 21:31:58
+
+. 
+. local encodedShipVars shipsToUS shipsFromUS shipsToNL ///
+>         shipsFromNL shipsToFR shipsFromFR shipsToGB ///
+>         shipsFromGB shipsToCA shipsFromCA shipsToDE ///
+>         shipsFromDE shipsToAU shipsFromAU shipsToEU ///
+>         shipsFromEU shipsToES shipsFromES shipsToNAMERICA ///
+>         shipsFromNAMERICA shipsToBE shipsFromBE shipsToWW ///
+>         shipsFromWW shipsToSI shipsFromSI shipsToIT shipsFromIT ///
+>         shipsToDK shipsFromDK shipsToSAMERICA shipsFromSAMERICA ///
+>         shipsToCH shipsFromCH shipsToBR shipsFromBR shipsToCZ ///
+>         shipsFromCZ shipsToSE shipsFromSE shipsToCO shipsFromCO ///
+>         shipsToCN shipsFromCN shipsToPL shipsFromPL shipsToGR ///
+>         shipsFromGR
+
+.         
+. local shipsToVars shipsToUS shipsToNL ///
+>         shipsToFR shipsToGB ///
+>         shipsToCA shipsToDE ///
+>         shipsToAU shipsToEU ///
+>         shipsToES shipsToNAMERICA ///
+>         shipsToBE shipsToWW ///
+>         shipsToSI shipsToIT ///
+>         shipsToDK shipsToSAMERICA ///
+>         shipsToCH shipsToBR shipsToCZ ///
+>         shipsToSE shipsToCO ///
+>         shipsToCN shipsToPL shipsToGR ///
+>         
+
+.         
+. local shipsFromVars shipsFromUS ///
+>         shipsFromNL shipsFromFR ///
+>         shipsFromGB shipsFromCA ///
+>         shipsFromDE shipsFromAU ///
+>         shipsFromEU shipsFromES ///
+>         shipsFromNAMERICA shipsFromBE ///
+>         shipsFromWW shipsFromSI shipsFromIT ///
+>         shipsFromDK shipsFromSAMERICA ///
+>         shipsFromCH shipsFromBR ///
+>         shipsFromCZ shipsFromSE shipsFromCO ///
+>         shipsFromCN shipsFromPL ///
+>         shipsFromGR
+
+.         
+.         
+. use cocainePrices
+
+. 
+. table escrow, content(mean usPricePerGramPure mean successful_transactions me
+> an rating mean youngVendor)
+
+--------------------------------------------------------------------------
+   escrow | mean(usPric~e)  mean(succes~s)    mean(rating)  mean(youngV~r)
+----------+---------------------------------------------------------------
+        0 |       95.63168         367.211        4.892276        .3739837
+        1 |       81.24309         330.994        4.881744        .5127753
+--------------------------------------------------------------------------
+
+. 
+. 
+. estpost sum usPricePerGramPure successful_transactions escrow rating if ships
+> FromAU==0
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd) 
+-------------+-------------------------------------------------------
+usPricePer~e |      1464       1464   78.46806   1550.464   39.37593 
+successful~s |      1464       1464   340.1168   277795.2   527.0628 
+      escrow |      1464       1464   .7718579   .1762136   .4197781 
+      rating |      1464       1464   4.882773   .0149704   .1223537 
+
+             |    e(min)     e(max)     e(sum) 
+-------------+---------------------------------
+usPricePer~e |  .0011706   1212.638   114877.2 
+successful~s |         1       3250     497931 
+      escrow |         0          1       1130 
+      rating |      4.39          5    7148.38 
+
+. esttab using summaryAU1.tex, cell(mean(label(Mean)) sd(par label(Std.))) nonu
+> mber nomtitle replace
+(output written to summaryAU1.tex)
+
+. estpost sum usPricePerGram successful_transactions escrow rating if shipsFrom
+> AU==1
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd) 
+-------------+-------------------------------------------------------
+usPricePer~m |        40         40   268.2407   16762.66   129.4707 
+successful~s |        40         40      331.2   321565.6   567.0675 
+      escrow |        40         40       .125   .1121795   .3349321 
+      rating |        40         40    4.94125   .0012215   .0349495 
+
+             |    e(min)     e(max)     e(sum) 
+-------------+---------------------------------
+usPricePer~m |  78.68948   785.7528   10729.63 
+successful~s |        15       1650      13248 
+      escrow |         0          1          5 
+      rating |       4.9          5     197.65 
+
+. esttab using summaryAU2.tex, cell(mean(label(Mean)) sd(par label(Std.))) nonu
+> mber nomtitle replace
+(output written to summaryAU2.tex)
+
+. 
+. 
+. estpost sum usPricePerGramPure successful_transactions escrow rating if (ship
+> sFromAU==0 & escrow==0)
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd) 
+-------------+-------------------------------------------------------
+usPricePer~e |       334        334   77.22122   689.3095    26.2547 
+successful~s |       334        334   366.5299   191286.7   437.3634 
+      escrow |       334        334          0          0          0 
+      rating |       334        334   4.887665    .009884   .0994184 
+
+             |    e(min)     e(max)     e(sum) 
+-------------+---------------------------------
+usPricePer~e |  25.57272   255.0444   25791.89 
+successful~s |         1       2450     122421 
+      escrow |         0          0          0 
+      rating |      4.55          5    1632.48 
+
+. esttab using escrow1.tex, cell(mean(label(Mean)) sd(par label(Std.))) nonumbe
+> r nomtitle replace
+(note: file escrow1.tex not found)
+(output written to escrow1.tex)
+
+. estpost sum usPricePerGram successful_transactions escrow rating if (shipsFro
+> mAU==0 & escrow==1)
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd) 
+-------------+-------------------------------------------------------
+usPricePer~m |      1130       1130    69.8593   1456.455   38.16354 
+successful~s |      1130       1130   332.3097   303289.7   550.7174 
+      escrow |      1130       1130          1          0          0 
+      rating |      1130       1130   4.881327   .0164748    .128354 
+
+             |    e(min)     e(max)     e(sum) 
+-------------+---------------------------------
+usPricePer~m |  .0010302   1091.374   78941.01 
+successful~s |         1       3250     375510 
+      escrow |         1          1       1130 
+      rating |      4.39          5     5515.9 
+
+. esttab using escrow2.tex, cell(mean(label(Mean)) sd(par label(Std.))) nonumbe
+> r nomtitle replace
+(note: file escrow2.tex not found)
+(output written to escrow2.tex)
+
+. 
+. // sort escrow
+. // tabulate escrow youngVendor, summarize(usPricePerGramPure) nofreq
+. 
+. 
+. 
+. 
+. capture log close
